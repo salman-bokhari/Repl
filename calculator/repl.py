@@ -1,5 +1,19 @@
 from calculator import operations
 
+OPS = {
+    "+": operations.add,
+    "-": operations.subtract,
+    "*": operations.multiply,
+    "/": operations.divide
+}
+
+def _handle_operation(op, a, b):
+    """Handles arithmetic operations and exceptions."""
+    try:
+        return OPS[op](a, b)
+    except ZeroDivisionError as e:
+        return str(e)
+
 def run():
     print("Welcome to CLI Calculator! Type 'exit' to quit.")
 
@@ -10,7 +24,7 @@ def run():
                 print("Goodbye!")
                 break
 
-            if op not in {"+", "-", "*", "/"}:
+            if op not in OPS:
                 print("Invalid operation. Please choose +, -, *, /.")
                 continue
 
@@ -24,23 +38,12 @@ def run():
                 print("Invalid input. Please enter numeric values.")
                 continue
 
-            if op == "+":
-                result = operations.add(a, b)
-            elif op == "-":
-                result = operations.subtract(a, b)
-            elif op == "*":
-                result = operations.multiply(a, b)
-            else:  # "/"
-                try:
-                    result = operations.divide(a, b)
-                except ZeroDivisionError as e:
-                    print(e)
-                    continue
-
+            result = _handle_operation(op, a, b)
             print(f"Result: {result}")
 
         except KeyboardInterrupt:
             print("\nGoodbye!")
             break
+
 if __name__ == "__main__":
-    run()
+    run()  # pragma: no cover
